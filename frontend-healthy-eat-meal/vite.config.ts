@@ -8,7 +8,6 @@ export default defineConfig({
   plugins: [react(), tsconfigPaths()],
   resolve: {
     alias: {
-      // 🌟 Намертво привязываем элиас @shared для сборщика стилей
       '@shared': path.resolve(__dirname, './src/shared'),
     },
   },
