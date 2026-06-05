@@ -1,4 +1,4 @@
-import MealsList from '@components/MealsList'
+import MealsList from '@pages/DiaryPage/MealsList'
 import { Link } from 'react-router-dom'
 
 export default function DiaryPage() {
