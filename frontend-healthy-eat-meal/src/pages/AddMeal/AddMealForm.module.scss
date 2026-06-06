@@ -1,0 +1,98 @@
+@use "@shared/styles/variables" as *;
+
+.card {
+  background: $color-surface;
+  padding: 28px;
+  border-radius: $radius-lg;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+  border: 1px solid #e9ecef;
+}
+
+.title {
+  margin-top: 0;
+  margin-bottom: 24px;
+  font-size: 22px;
+  font-weight: 700;
+  color: $color-text;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  label {
+    font-size: 14px;
+    font-weight: 600;
+    color: $color-text;
+  }
+}
+
+.input {
+  padding: 12px 14px;
+  font-size: 16px;
+  border: 1px solid #ced4da;
+  border-radius: $radius-md;
+  font-family: inherit;
+  transition: $transition-fast;
+  background: #fff;
+  color: $color-text;
+
+  &:focus {
+    outline: none;
+    border-color: $color-primary;
+    box-shadow: 0 0 0 3px rgba($color-primary, 0.12);
+  }
+
+  &::placeholder {
+    color: #adb5bd;
+  }
+
+  &:disabled {
+    background: $color-bg;
+    cursor: not-allowed;
+    color: $color-text-muted;
+  }
+}
+
+.submitBtn {
+  margin-top: 8px;
+  padding: 14px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  background: $color-success;
+  border: none;
+  border-radius: $radius-md;
+  cursor: pointer;
+  transition: $transition-fast;
+  box-shadow: 0 4px 12px rgba($color-success, 0.15);
+
+  &:hover:not(:disabled) {
+    background: darken($color-success, 4%);
+    box-shadow: 0 6px 16px rgba($color-success, 0.25);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+}
+
+.error {
+  color: $color-danger;
+  background: rgba($color-danger, 0.06);
+  padding: 10px 14px;
+  border-radius: $radius-md;
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0;
+  border-left: 3px solid $color-danger;
+}

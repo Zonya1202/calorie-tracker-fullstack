@@ -1,0 +1,22 @@
+@use "@shared/styles/variables" as *;
+
+.container {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  color: $color-text-muted;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 500;
+  margin-bottom: 24px;
+  transition: $transition-fast;
+
+  &:hover {
+    color: $color-primary;
+    transform: translateX(-2px); // Слегка сдвигаем влево при наведении
+  }
+}

@@ -1,0 +1,100 @@
+@use "@shared/styles/variables" as *;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 48px 24px;
+  background: $color-surface;
+  border-radius: $radius-lg;
+  color: $color-text-muted;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+  border: 1px dashed #dee2e6;
+  font-size: 16px;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.card {
+  background: $color-surface;
+  padding: 16px 20px;
+  border-radius: $radius-md;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: $transition-fast;
+  border-left: 4px solid $color-primary; // Тонкая акцентная линия слева
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  }
+
+  @include mobile {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px;
+  }
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.foodName {
+  font-size: 18px;
+  font-weight: 600;
+  color: $color-text;
+  margin: 0;
+}
+
+.meta {
+  display: flex;
+  gap: 12px;
+  font-size: 13px;
+  color: $color-text-muted;
+  
+  @include mobile {
+    flex-direction: column;
+    gap: 4px;
+  }
+}
+
+.weight {
+  background: #f1f3f5;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.caloriesBadge {
+  background: rgba($color-primary, 0.08);
+  color: $color-primary;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 16px;
+  white-space: nowrap;
+
+  @include mobile {
+    align-self: flex-end;
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+  }
+}

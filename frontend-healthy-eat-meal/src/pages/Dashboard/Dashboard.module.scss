@@ -1,0 +1,52 @@
+@use "@shared/styles/variables" as *;
+
+.headerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+
+  @include mobile {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 700;
+  color: $color-text;
+  margin: 0;
+}
+
+.addBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  background: $color-primary;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: $radius-md;
+  transition: $transition-fast;
+  box-shadow: 0 4px 10px rgba($color-primary, 0.2);
+
+  &:hover {
+    background: darken($color-primary, 5%);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px rgba($color-primary, 0.3);
+  }
+
+  @include mobile {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid #dee2e6;
+  margin-bottom: 24px;
+}
