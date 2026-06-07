@@ -98,3 +98,78 @@
     box-sizing: border-box;
   }
 }
+
+.cardRight {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  @include mobile {
+    width: 100%;
+    justify-content: space-between;
+    margin-top: 12px;
+    border-top: 1px solid #f1f3f5;
+    padding-top: 12px;
+  }
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btnAction {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: $transition-fast;
+
+  &.edit {
+    color: $color-primary;
+    &:hover { background: rgba($color-primary, 0.08); }
+  }
+
+  &.delete {
+    color: $color-danger;
+    &:hover { background: rgba($color-danger, 0.08); }
+  }
+
+  &.save {
+    color: $color-success;
+    &:hover { background: rgba($color-success, 0.08); }
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
+
+// Стили для инпутов в режиме инлайн-редактирования
+.inlineForm {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  align-items: center;
+
+  @include mobile {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.inlineInput {
+  padding: 6px 10px;
+  font-size: 15px;
+  border: 1px solid #ced4da;
+  border-radius: $radius-md;
+  font-family: inherit;
+
+  &.name { flex: 2; }
+  &.number { flex: 1; max-width: 100px; }
+}

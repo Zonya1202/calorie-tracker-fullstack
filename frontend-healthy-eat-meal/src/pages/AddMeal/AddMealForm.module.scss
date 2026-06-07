@@ -34,7 +34,7 @@
   }
 }
 
-.input {
+.input, select {
   padding: 12px 14px;
   font-size: 16px;
   border: 1px solid #ced4da;
@@ -43,6 +43,8 @@
   transition: $transition-fast;
   background: #fff;
   color: $color-text;
+  width: 100%;
+  box-sizing: border-box;
 
   &:focus {
     outline: none;
@@ -95,4 +97,14 @@
   font-weight: 500;
   margin: 0;
   border-left: 3px solid $color-danger;
+}
+
+.select {
+  cursor: pointer;
+  appearance: none; // Убираем дефолтную уродливую стрелку браузера
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://w3.org' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%236c757d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+  padding-right: 40px; // Делаем отступ справа, чтобы текст не наезжал на стрелочку
 }

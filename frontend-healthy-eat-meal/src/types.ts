@@ -2,6 +2,9 @@
 export interface Meal {
   id: number
   food_name: string
+  calories_per_100g: number
+  weight_g: number
   total_calories: number
-  created_at: string // Бэкенд возвращает дату строкой ISO
+  meal_type: string
+  created_at: string
 }

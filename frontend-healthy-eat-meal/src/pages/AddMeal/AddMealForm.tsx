@@ -10,13 +10,14 @@ export default function AddMealForm() {
   const [foodName, setFoodName] = useState('')
   const [calories, setCalories] = useState('')
   const [weight, setWeight] = useState('')
+  const [mealType, setMealType] = useState('') // Новое состояние для типа приема пищи
   const [error, setError] = useState('')
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
     setError('')
 
-    if (!foodName || !calories || !weight) {
+    if (!foodName || !calories || !weight || !mealType) {
       setError('Пожалуйста, заполните все поля формы.')
       return
     }
@@ -31,6 +32,7 @@ export default function AddMealForm() {
         food_name: foodName,
         calories_per_100g: Number(calories),
         weight_g: Number(weight),
+        meal_type: mealType, // Здесь можно добавить выбор типа приема пищи, если нужно
       }).unwrap()
 
       navigate('/dashboard') // Возвращаемся в личный кабинет
@@ -43,6 +45,22 @@ export default function AddMealForm() {
     <div className={styles.card}>
       <h2 className={styles.title}>Что вы съели?</h2>
       <form onSubmit={handleSubmit} className={styles.form}>
+        <div className={styles.inputGroup}>
+          <label htmlFor="mealType">Прием пищи</label>
+          <select
+            id="mealType"
+            className={styles.select}
+            value={mealType}
+            onChange={(e) => setMealType(e.target.value)}
+            disabled={isLoading}
+          >
+            <option value="breakfast">Завтрак</option>
+            <option value="lunch">Обед</option>
+            <option value="dinner">Ужин</option>
+            <option value="snack">Перекус / Полдник</option>
+          </select>
+        </div>
+
         <div className={styles.inputGroup}>
           <label htmlFor="foodName">Название продукта</label>
           <input

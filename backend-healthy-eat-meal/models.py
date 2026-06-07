@@ -12,4 +12,5 @@ class MealModel(Base):
     calories_per_100g = Column(Integer, nullable=False)
     weight_g = Column(Integer, nullable=False)
     total_calories = Column(Integer, nullable=False)
+    meal_type = Column(String, default="breakfast", nullable=False)
     created_at = Column(DateTime, default=datetime.now)  # Время добавится автоматически
