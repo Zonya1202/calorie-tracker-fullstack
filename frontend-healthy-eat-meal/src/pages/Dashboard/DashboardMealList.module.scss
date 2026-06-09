@@ -1,4 +1,4 @@
-@use "@shared/styles/variables" as *;
+@use '@shared/styles/variables' as *;
 
 .container {
   display: flex;
@@ -68,7 +68,7 @@
   gap: 12px;
   font-size: 13px;
   color: $color-text-muted;
-  
+
   @include mobile {
     flex-direction: column;
     gap: 4px;
@@ -131,17 +131,23 @@
 
   &.edit {
     color: $color-primary;
-    &:hover { background: rgba($color-primary, 0.08); }
+    &:hover {
+      background: rgba($color-primary, 0.08);
+    }
   }
 
   &.delete {
     color: $color-danger;
-    &:hover { background: rgba($color-danger, 0.08); }
+    &:hover {
+      background: rgba($color-danger, 0.08);
+    }
   }
 
   &.save {
     color: $color-success;
-    &:hover { background: rgba($color-success, 0.08); }
+    &:hover {
+      background: rgba($color-success, 0.08);
+    }
   }
 
   &:disabled {
@@ -170,6 +176,40 @@
   border-radius: $radius-md;
   font-family: inherit;
 
-  &.name { flex: 2; }
-  &.number { flex: 1; max-width: 100px; }
+  &.name {
+    flex: 2;
+  }
+  &.number {
+    flex: 1;
+    max-width: 100px;
+  }
+}
+
+.section {
+  margin-bottom: 28px;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 4px;
+  margin-bottom: 12px;
+  border-bottom: 2px solid #e9ecef;
+}
+
+.sectionTitle {
+  font-size: 18px;
+  font-weight: 700;
+  color: $color-text;
+  margin: 0;
+}
+
+.sectionCalories {
+  font-size: 14px;
+  font-weight: 600;
+  color: $color-text-muted;
+  background: #e9ecef;
+  padding: 4px 10px;
+  border-radius: 12px;
 }

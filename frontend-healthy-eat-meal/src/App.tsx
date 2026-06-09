@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Dashboard from '@pages/Dashboard/Dashbord'
 import AddMeal from '@pages/AddMeal/AddMeal'
-import Layout from '@components/Layout'
+import Layout from '@components/Layout/Layout'
 
 function App() {
   return (

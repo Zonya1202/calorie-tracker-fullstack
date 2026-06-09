@@ -4,6 +4,7 @@ from pydantic import BaseModel
 from datetime import datetime
 from typing import Any, List, cast
 from sqlalchemy.orm import Session
+from security import get_password_hash
 
 # Импортируем наши новые модули базы данных
 import models
@@ -23,7 +24,24 @@ app.add_middleware(
 )
 
 
-# Схемы валидации Pydantic для фронтенда остаются почти такими же
+# Схемы валидации Pydantic для фронтенда
+
+
+# Схемы для авторизации
+class UserRegister(BaseModel):
+    email: str
+    password: str
+
+
+class UserResponse(BaseModel):
+    id: int
+    email: str
+
+    class Config:
+        from_attributes = True
+
+
+# Схемы для блюд
 class MealCreate(BaseModel):
     food_name: str
     calories_per_100g: int
@@ -46,6 +64,7 @@ class MealResponse(BaseModel):
     total_calories: int
     meal_type: str
     created_at: datetime
+    user_id: int
 
     # Включаем ORM-режим, чтобы Pydantic умел читать данные напрямую из объектов SQLAlchemy
     class Config:
@@ -53,6 +72,35 @@ class MealResponse(BaseModel):
 
 
 # --- ЭНДПОИНТЫ ---
+
+
+# ЭНДПОИНТ РЕГИСТРАЦИИ ПОЛЬЗОВАТЕЛЯ
+@app.post("/api/auth/register", response_model=UserResponse, status_code=201)
+def register_user(user_data: UserRegister, db: Session = Depends(get_db)):
+    # 1. Проверяем, нет ли уже пользователя с таким email в базе данных
+    existing_user = (
+        db.query(models.UserModel)
+        .filter(models.UserModel.email == user_data.email)
+        .first()
+    )
+    if existing_user:
+        raise HTTPException(
+            status_code=400, detail="Пользователь с таким email уже зарегистрирован"
+        )
+
+    # 2. Шифруем пароль (превращаем в безопасный хэш)
+    hashed_pwd = get_password_hash(user_data.password)
+
+    # 3. Создаем объект нового пользователя для записи в БД
+    new_user = models.UserModel(email=user_data.email, hashed_password=hashed_pwd)
+
+    # 4. Сохраняем в SQLite
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
+
+    # Возвращаем созданного пользователя (сработает схема UserResponse: отдаст только id и email)
+    return new_user
 
 
 # 1. ПОЛУЧЕНИЕ ДАННЫХ ИЗ БД (GET)
@@ -74,6 +122,7 @@ def add_meal(meal: MealCreate, db: Session = Depends(get_db)):
         weight_g=meal.weight_g,
         total_calories=total_cals,
         meal_type=meal.meal_type,
+        user_id=1,  # Временно жестко привязываем к пользователю с ID=1 (потом будет динамически)
     )
 
     db.add(db_meal)  # Ложим объект в очередь на добавление

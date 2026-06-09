@@ -1,4 +1,4 @@
-@use "@shared/styles/variables" as *;
+@use '@shared/styles/variables' as *;
 
 .card {
   background: $color-surface;
@@ -22,19 +22,7 @@
   gap: 20px;
 }
 
-.inputGroup {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-
-  label {
-    font-size: 14px;
-    font-weight: 600;
-    color: $color-text;
-  }
-}
-
-.input, select {
+.select {
   padding: 12px 14px;
   font-size: 16px;
   border: 1px solid #ced4da;

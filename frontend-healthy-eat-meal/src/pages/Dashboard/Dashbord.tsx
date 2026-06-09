@@ -2,7 +2,7 @@ import DashboardMealsList from '@pages/Dashboard/DashbordMealsList'
 import { Link } from 'react-router-dom'
 import styles from './Dashboard.module.scss'
 
-export default function DiaryPage() {
+export default function Dashboard() {
   return (
     <div>
       <div className={styles.headerRow}>

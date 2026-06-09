@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAddMealMutation } from '@shared/api/meals'
+import Input from '@components/Input/Input'
 import styles from './AddMealForm.module.scss'
 
 export default function AddMealForm() {
@@ -10,20 +11,15 @@ export default function AddMealForm() {
   const [foodName, setFoodName] = useState('')
   const [calories, setCalories] = useState('')
   const [weight, setWeight] = useState('')
-  const [mealType, setMealType] = useState('') // Новое состояние для типа приема пищи
+  const [mealType, setMealType] = useState('breakfast')
   const [error, setError] = useState('')
 
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault()
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
     setError('')
 
     if (!foodName || !calories || !weight || !mealType) {
       setError('Пожалуйста, заполните все поля формы.')
-      return
-    }
-
-    if (Number(calories) <= 0 || Number(weight) <= 0) {
-      setError('Калорийность и вес должны быть больше нуля.')
       return
     }
 
@@ -32,12 +28,11 @@ export default function AddMealForm() {
         food_name: foodName,
         calories_per_100g: Number(calories),
         weight_g: Number(weight),
-        meal_type: mealType, // Здесь можно добавить выбор типа приема пищи, если нужно
+        meal_type: mealType,
       }).unwrap()
-
-      navigate('/dashboard') // Возвращаемся в личный кабинет
+      navigate('/dashboard')
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Произошла ошибка при сохранении данных.')
+      setError('Не удалось сохранить запись.' + (err as Error).message)
     }
   }
 
@@ -61,45 +56,35 @@ export default function AddMealForm() {
           </select>
         </div>
 
-        <div className={styles.inputGroup}>
-          <label htmlFor="foodName">Название продукта</label>
-          <input
-            id="foodName"
-            type="text"
-            className={styles.input}
-            placeholder="Например: Куриное филе"
-            value={foodName}
-            onChange={(e) => setFoodName(e.target.value)}
-            disabled={isLoading}
-          />
-        </div>
+        <Input
+          id="foodName"
+          label="Название продукта"
+          type="text"
+          placeholder="Например: Куриное филе"
+          value={foodName}
+          onChange={(e) => setFoodName(e.target.value)}
+          disabled={isLoading}
+        />
 
-        <div className={styles.inputGroup}>
-          <label htmlFor="calories">Калорийность (на 100г)</label>
-          <input
-            id="calories"
-            type="number"
-            className={styles.input}
-            placeholder="Например: 113"
-            value={calories}
-            onChange={(e) => setCalories(e.target.value)}
-            disabled={isLoading}
-          />
-        </div>
+        <Input
+          id="calories"
+          label="Калорийность (на 100г)"
+          type="number"
+          placeholder="Например: 113"
+          value={calories}
+          onChange={(e) => setCalories(e.target.value)}
+          disabled={isLoading}
+        />
 
-        <div className={styles.inputGroup}>
-          <label htmlFor="weight">Вес порции (в граммах)</label>
-          <input
-            id="weight"
-            type="number"
-            className={styles.input}
-            placeholder="Например: 200"
-            value={weight}
-            onChange={(e) => setWeight(e.target.value)}
-            disabled={isLoading}
-          />
-        </div>
-
+        <Input
+          id="weight"
+          label="Вес порции (в граммах)"
+          type="number"
+          placeholder="Например: 200"
+          value={weight}
+          onChange={(e) => setWeight(e.target.value)}
+          disabled={isLoading}
+        />
         {error && <p className={styles.error}>{error}</p>}
 
         <button type="submit" className={styles.submitBtn} disabled={isLoading}>

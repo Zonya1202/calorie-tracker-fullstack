@@ -1,0 +1,43 @@
+@use '@shared/styles/variables' as *;
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+
+  label {
+    font-size: 14px;
+    font-weight: 600;
+    color: $color-text;
+  }
+}
+
+.input {
+  padding: 12px 14px;
+  font-size: 16px;
+  border: 1px solid #ced4da;
+  border-radius: $radius-md;
+  font-family: inherit;
+  transition: $transition-fast;
+  background: #fff;
+  color: $color-text;
+  box-sizing: border-box;
+  width: 100%;
+
+  &:focus {
+    outline: none;
+    border-color: $color-primary;
+    box-shadow: 0 0 0 3px rgba($color-primary, 0.12);
+  }
+
+  &::placeholder {
+    color: #adb5bd;
+  }
+
+  &:disabled {
+    background: $color-bg;
+    cursor: not-allowed;
+    color: $color-text-muted;
+  }
+}

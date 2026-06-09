@@ -1,4 +1,4 @@
-@use "@shared/styles/variables" as *;
+@use '@shared/styles/variables' as *;
 
 .headerRow {
   display: flex;
@@ -21,9 +21,6 @@
 }
 
 .addBtn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
   padding: 10px 20px;
   background: $color-primary;
   color: #fff;
