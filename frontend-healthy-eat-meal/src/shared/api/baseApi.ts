@@ -1,19 +1,23 @@
-import {
-  createApi,
-  fetchBaseQuery,
-} from '@reduxjs/toolkit/query/react'
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import type { RootState } from '@store/index' // Импортируем тип стора для типизации
 
 export const baseApi = createApi({
   reducerPath: 'api',
-  // Аналог твоего базового конфига request
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:8000/api',
-    // Здесь можно глобально прикрепить заголовки, например, токены авторизации
-    prepareHeaders: (headers) => {
-      headers.set('Content-Type', 'application/json')
+    baseUrl: 'http://localhost:8000/api/',
+    // МАГИЯ: Автоматически добавляем токен авторизации ко всем запросам
+    prepareHeaders: (headers, { getState }) => {
+      // Вытаскиваем токен прямо из нашего Redux-состояния auth
+      const token = (getState() as RootState).auth.token
+
+      if (token) {
+        // Если токен есть в памяти — прикрепляем его по стандарту Bearer
+        headers.set('Authorization', `Bearer ${token}`)
+      }
+
       return headers
     },
   }),
-  tagTypes: ['Meals'], // Список сущностей для авто-обновления кэша
-  endpoints: () => ({}), // Оставляем пустым, сущности будут внедрять свои эндпоинты сами
+  tagTypes: ['Meals'],
+  endpoints: () => ({}),
 })

@@ -1,14 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit'
-import { baseApi } from '@shared/api/baseApi' // Используем твой элиас!
+import { baseApi } from '@shared/api/baseApi'
+import authReducer from './authSlice'
 
 export const store = configureStore({
   reducer: {
     // Подключаем кэш нашего API в общее дерево Redux
     [baseApi.reducerPath]: baseApi.reducer,
-
-    // Если в будущем появятся обычные слайсы (например, для темы или профиля),
-    // они будут добавляться сюда:
-    // theme: themeReducer,
+    // И наш слайс авторизации, который будет хранить токен и статус аутентификации
+    auth: authReducer,
   },
 
   // Мидлвар нужен RTK Query для кэширования, инвалидации тегов и полилинга

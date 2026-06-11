@@ -1,9 +1,14 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import Dashboard from '@pages/Dashboard/Dashbord'
 import AddMeal from '@pages/AddMeal/AddMeal'
 import Layout from '@components/Layout/Layout'
+import Register from '@pages/Register/Register'
+import LogIn from '@pages/LogIn/LogIn'
+import { useSelector } from 'react-redux'
+import type { RootState } from './store'
 
 function App() {
+  const { isAuthenticated } = useSelector((state: RootState) => state.auth)
   return (
     <Router>
       <Layout>
@@ -15,8 +20,8 @@ function App() {
               <div style={{ textAlign: 'center', padding: '40px 20px' }}>
                 <h1>Добро пожаловать в Калории2026!</h1>
                 <p>Это крутой fullstack трекер еды.</p>
-                <a
-                  href="/dashboard"
+                <Link
+                  to={isAuthenticated ? '/dashboard' : '/login'}
                   style={{
                     display: 'inline-block',
                     marginTop: '20px',
@@ -28,7 +33,7 @@ function App() {
                   }}
                 >
                   Перейти в личный кабинет (Dashboard)
-                </a>
+                </Link>
               </div>
             }
           />
@@ -37,6 +42,9 @@ function App() {
 
           {/* Страница формы добавления */}
           <Route path="/add" element={<AddMeal />} />
+
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<LogIn />} />
 
           {/* Роут-заглушка на случай, если пользователь введет несуществующий URL */}
           <Route

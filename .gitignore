@@ -5,10 +5,10 @@ frontend-healthy-eat-meal/.lock-wscript
 frontend-healthy-eat-meal/.vite/
 
 # Бэкенд (Python)
-backend-healthy-eat-meal/__pycache__/
+backend-healthy-eat-meal/**/__pycache__/
 backend-healthy-eat-meal/.pytest_cache/
 backend-healthy-eat-meal/*.db
-backend-healthy-eat-meal/*.pyc
+backend-healthy-eat-meal/**/*.pyc 
 
 # Системные файлы
 .DS_Store

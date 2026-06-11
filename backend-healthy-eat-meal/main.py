@@ -1,18 +1,22 @@
-from fastapi import FastAPI, Depends, HTTPException, status
+# Глобальная Точка Входа (main.py)
+# Теперь этот файл выполняет роль Генерального Директора. Он сам ничего не делает, он просто собирает систему воедино:
+# 1. Инициализирует сам фреймворк FastAPI.
+# 2. Дает команду SQLAlchemy проверить и создать таблицы в базе данных SQLite (models.Base.metadata.create_all).
+# 3. Настраивает правила безопасности CORS для фронтенда.
+# 4. Регистрирует («подключает») роутеры: app.include_router(auth.router).
+
+
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
-from datetime import datetime
-from typing import Any, List, cast
-from sqlalchemy.orm import Session
-from security import get_password_hash
-
-# Импортируем наши новые модули базы данных
 import models
-from database import engine, get_db
+from database import engine
 
-app = FastAPI()
+# Импортируем наши новые роутеры
+from routers import auth, meals
 
-# МАГИЯ: Автоматически создаем таблицы в файле calories.db, если их еще нет
+app = FastAPI(title="Calorie Tracker API", version="1.0.0")
+
+# Автоматически разворачиваем таблицы в базе SQLite
 models.Base.metadata.create_all(bind=engine)
 
 app.add_middleware(
@@ -23,147 +27,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
-# Схемы валидации Pydantic для фронтенда
-
-
-# Схемы для авторизации
-class UserRegister(BaseModel):
-    email: str
-    password: str
-
-
-class UserResponse(BaseModel):
-    id: int
-    email: str
-
-    class Config:
-        from_attributes = True
-
-
-# Схемы для блюд
-class MealCreate(BaseModel):
-    food_name: str
-    calories_per_100g: int
-    weight_g: int
-    meal_type: str
-
-
-class MealUpdate(BaseModel):
-    food_name: str
-    calories_per_100g: int
-    weight_g: int
-    meal_type: str
-
-
-class MealResponse(BaseModel):
-    id: int
-    food_name: str
-    calories_per_100g: int
-    weight_g: int
-    total_calories: int
-    meal_type: str
-    created_at: datetime
-    user_id: int
-
-    # Включаем ORM-режим, чтобы Pydantic умел читать данные напрямую из объектов SQLAlchemy
-    class Config:
-        from_attributes = True
-
-
-# --- ЭНДПОИНТЫ ---
-
-
-# ЭНДПОИНТ РЕГИСТРАЦИИ ПОЛЬЗОВАТЕЛЯ
-@app.post("/api/auth/register", response_model=UserResponse, status_code=201)
-def register_user(user_data: UserRegister, db: Session = Depends(get_db)):
-    # 1. Проверяем, нет ли уже пользователя с таким email в базе данных
-    existing_user = (
-        db.query(models.UserModel)
-        .filter(models.UserModel.email == user_data.email)
-        .first()
-    )
-    if existing_user:
-        raise HTTPException(
-            status_code=400, detail="Пользователь с таким email уже зарегистрирован"
-        )
-
-    # 2. Шифруем пароль (превращаем в безопасный хэш)
-    hashed_pwd = get_password_hash(user_data.password)
-
-    # 3. Создаем объект нового пользователя для записи в БД
-    new_user = models.UserModel(email=user_data.email, hashed_password=hashed_pwd)
-
-    # 4. Сохраняем в SQLite
-    db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
-
-    # Возвращаем созданного пользователя (сработает схема UserResponse: отдаст только id и email)
-    return new_user
-
-
-# 1. ПОЛУЧЕНИЕ ДАННЫХ ИЗ БД (GET)
-@app.get("/api/meals", response_model=List[MealResponse])
-def get_meals(db: Session = Depends(get_db)):
-    return db.query(models.MealModel).all()
-
-
-# 2. ДОБАВЛЕНИЕ ДАННЫХ В БД (POST)
-@app.post("/api/meals", response_model=MealResponse)
-def add_meal(meal: MealCreate, db: Session = Depends(get_db)):
-    # Рассчитываем итоговые калории (наша бизнес-логика)
-    total_cals = int((meal.calories_per_100g * meal.weight_g) / 100)
-
-    # Создаем объект модели SQLAlchemy для записи в БД
-    db_meal = models.MealModel(
-        food_name=meal.food_name,
-        calories_per_100g=meal.calories_per_100g,
-        weight_g=meal.weight_g,
-        total_calories=total_cals,
-        meal_type=meal.meal_type,
-        user_id=1,  # Временно жестко привязываем к пользователю с ID=1 (потом будет динамически)
-    )
-
-    db.add(db_meal)  # Ложим объект в очередь на добавление
-    db.commit()  # Фиксируем изменения в файле базы данных
-    db.refresh(
-        db_meal
-    )  # Обновляем объект, чтобы получить автоматически сгенерированный базой id
-
-    return db_meal
-
-
-# 3. ИЗМЕНЕНИЕ БЛЮДА (PUT)
-@app.put("/api/meals/{meal_id}", response_model=MealResponse)
-def update_meal(meal_id: int, updated_meal: MealUpdate, db: Session = Depends(get_db)):
-    db_meal = db.query(models.MealModel).filter(models.MealModel.id == meal_id).first()
-    if not db_meal:
-        raise HTTPException(status_code=404, detail="Блюдо не найдено")
-
-    db_meal = cast(Any, db_meal)
-
-    # Пересчитываем калории на основе новых введенных данных
-    total_cals = int((updated_meal.calories_per_100g * updated_meal.weight_g) / 100)
-
-    db_meal.food_name = updated_meal.food_name
-    db_meal.calories_per_100g = updated_meal.calories_per_100g
-    db_meal.weight_g = updated_meal.weight_g
-    db_meal.total_calories = total_cals
-    db_meal.meal_type = updated_meal.meal_type
-
-    db.commit()
-    db.refresh(db_meal)
-    return db_meal
-
-
-# 4. УДАЛЕНИЕ БЛЮДА (DELETE)
-@app.delete("/api/meals/{meal_id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_meal(meal_id: int, db: Session = Depends(get_db)):
-    db_meal = db.query(models.MealModel).filter(models.MealModel.id == meal_id).first()
-    if not db_meal:
-        raise HTTPException(status_code=404, detail="Блюдо не найдено")
-
-    db.delete(db_meal)
-    db.commit()
-    return None
+# МАГИЯ: Подключаем роутеры к приложению
+app.include_router(auth.router)
+app.include_router(meals.router)
