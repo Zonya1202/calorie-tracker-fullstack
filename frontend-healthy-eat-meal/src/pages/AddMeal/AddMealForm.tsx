@@ -18,8 +18,18 @@ export default function AddMealForm() {
     e.preventDefault()
     setError('')
 
-    if (!foodName || !calories || !weight || !mealType) {
+    if (!foodName.trim() || !calories || !weight || !mealType) {
       setError('Пожалуйста, заполните все поля формы.')
+      return
+    }
+
+    if (Number(calories) <= 0 || Number(weight) <= 0) {
+      setError('Калорийность и вес порции должны быть строго больше нуля.')
+      return
+    }
+
+    if (Number(calories) > 900) {
+      setError('Калорийность на 100г не может превышать 900 ккал (чистый жир).')
       return
     }
 

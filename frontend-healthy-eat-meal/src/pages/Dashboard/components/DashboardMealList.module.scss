@@ -1,0 +1,81 @@
+@use '@shared/styles/variables' as *;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 48px 24px;
+  background: $color-surface;
+  border: 1px dashed $color-border;
+  border-radius: $radius-lg;
+  color: $color-text-muted;
+  font-size: 15px;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 8px;
+  border-bottom: 1px solid $color-border;
+}
+
+.sectionTitle {
+  font-size: 16px;
+  font-weight: 700;
+  color: $color-text;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.sectionCalories {
+  font-size: 13px;
+  font-weight: 600;
+  color: $color-text-muted;
+  background: lighten($color-surface, 3%);
+  padding: 4px 10px;
+  border-radius: $radius-sm;
+  border: 1px solid $color-border;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0;
+  margin: 0;
+}
+
+.card {
+  background: $color-surface;
+  border: 1px solid $color-border;
+  padding: 16px 20px;
+  border-radius: $radius-md;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: $transition-fast;
+
+  &:hover {
+    background: $color-surface-hover;
+    border-color: lighten($color-border, 5%);
+    transform: translateY(-1px);
+  }
+
+  @include mobile {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 16px;
+  }
+}

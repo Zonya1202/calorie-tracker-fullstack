@@ -1,0 +1,80 @@
+@use '@shared/styles/variables' as *;
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.foodName {
+  font-size: 16px;
+  font-weight: 600;
+  color: $color-text;
+  margin: 0;
+}
+
+.meta {
+  display: flex;
+  gap: 12px;
+  font-size: 12px;
+  color: $color-text-muted;
+}
+
+.weight {
+  background: lighten($color-surface, 4%);
+  padding: 1px 6px;
+  border-radius: $radius-sm;
+  color: $color-text;
+}
+
+.cardRight {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+
+  @media (max-width: 576px) {
+    width: 100%;
+    justify-content: space-between;
+    border-top: 1px solid $color-border;
+    padding-top: 12px;
+  }
+}
+
+.caloriesBadge {
+  font-size: 14px;
+  font-weight: 700;
+  color: $color-success;
+  background: rgba($color-success, 0.06);
+  padding: 6px 12px;
+  border-radius: 20px;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btnAction {
+  background: none;
+  border: 1px solid $color-border;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: $radius-sm;
+  font-size: 12px;
+  font-weight: 600;
+  transition: $transition-fast;
+  color: $color-text-muted;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+
+  &:hover {
+    color: $color-text;
+    background: lighten($color-surface, 5%);
+  }
+
+  &.delete:hover {
+    color: $color-danger;
+    border-color: rgba($color-danger, 0.3);
+    background: rgba($color-danger, 0.05);
+  }
+}

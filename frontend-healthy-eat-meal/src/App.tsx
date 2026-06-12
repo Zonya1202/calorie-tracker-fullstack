@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
-import Dashboard from '@pages/Dashboard/Dashbord'
+import Dashboard from '@pages/Dashboard/Dashboard'
 import AddMeal from '@pages/AddMeal/AddMeal'
 import Layout from '@components/Layout/Layout'
 import Register from '@pages/Register/Register'

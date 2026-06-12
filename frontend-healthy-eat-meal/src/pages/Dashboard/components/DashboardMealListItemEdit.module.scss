@@ -1,0 +1,55 @@
+@use '@shared/styles/variables' as *;
+
+.inlineForm {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.inputsGrid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 12px;
+  width: 100%;
+
+  @include mobile {
+    grid-template-columns: 1fr;
+  }
+}
+
+.formActions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.btnAction {
+  background: transparent;
+  border: 1px solid $color-border;
+  cursor: pointer;
+  padding: 8px 16px;
+  border-radius: $radius-sm;
+  font-size: 12px;
+  font-weight: 600;
+  transition: $transition-fast;
+  color: $color-text-muted;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+
+  &:hover {
+    color: $color-text;
+    background: lighten($color-surface, 4%);
+    border-color: lighten($color-border, 10%);
+  }
+
+  &.save {
+    color: $color-success;
+    border-color: rgba($color-success, 0.2);
+    &:hover {
+      background: rgba($color-success, 0.06);
+      border-color: $color-success;
+    }
+  }
+}

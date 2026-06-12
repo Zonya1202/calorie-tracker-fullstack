@@ -1,18 +1,18 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, PositiveInt
 from datetime import datetime
 
 
 class MealCreate(BaseModel):
     food_name: str
-    calories_per_100g: int
-    weight_g: int
+    calories_per_100g: PositiveInt
+    weight_g: PositiveInt
     meal_type: str
 
 
 class MealUpdate(BaseModel):
     food_name: str
-    calories_per_100g: int
-    weight_g: int
+    calories_per_100g: PositiveInt
+    weight_g: PositiveInt
     meal_type: str
 
 
