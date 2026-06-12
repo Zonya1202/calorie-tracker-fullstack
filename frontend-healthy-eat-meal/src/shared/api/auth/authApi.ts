@@ -19,6 +19,7 @@ export const authApi = baseApi.injectEndpoints({
         const formData = new URLSearchParams()
         formData.append('username', credentials.email) // В FastAPI поле называется username
         formData.append('password', credentials.password)
+        formData.append('name', credentials.name || '')
 
         return {
           url: 'auth/login',

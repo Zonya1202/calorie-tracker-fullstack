@@ -1,44 +1,69 @@
-@use "@shared/styles/variables" as *;
+@use '@shared/styles/variables' as *;
 
 .header {
   background: $color-surface;
-  border-bottom: 1px solid #dee2e6;
-  padding: 16px 24px;
+  border-bottom: 1px solid $color-border;
+  padding: 14px 0;
   position: sticky;
   top: 0;
   z-index: 100;
 }
 
 .container {
-  max-width: 800px;
-  margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
 .logo {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 700;
   color: $color-text;
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  letter-spacing: -0.5px;
+  transition: $transition-fast;
+
+  &:hover {
+    opacity: 0.8;
+  }
 }
 
 .nav {
   display: flex;
-  gap: 20px;
+  align-items: center;
+  gap: 24px;
 }
 
 .link {
   color: $color-text-muted;
-  text-decoration: none;
   font-weight: 500;
+  font-size: 14px;
   transition: $transition-fast;
 
   &:hover {
-    color: $color-primary;
+    color: $color-text;
+  }
+}
+
+.userName {
+  font-size: 14px;
+  font-weight: 600;
+  color: $color-primary;
+  background: rgba($color-primary, 0.06);
+  padding: 4px 10px;
+  border-radius: $radius-sm;
+}
+
+.logoutBtn {
+  background: none;
+  border: none;
+  color: $color-text-muted;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
+  transition: $transition-fast;
+
+  &:hover {
+    color: $color-danger;
   }
 }

@@ -1,11 +1,13 @@
 import { useLoginMutation } from '@shared/api/auth/authApi'
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { setToken } from '@store/authSlice'
+import { setCredentials } from '@store/authSlice'
+import Input from '@components/Input/Input'
+import styles from './LogInForm.module.scss'
 
 export default function LogInForm() {
-  const [login] = useLoginMutation()
+  const [login, { isLoading }] = useLoginMutation()
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
@@ -15,6 +17,8 @@ export default function LogInForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setError('')
+
     if (!email || !password) {
       setError('Пожалуйста, заполните все поля формы.')
       return
@@ -26,31 +30,45 @@ export default function LogInForm() {
         password: password,
       }).unwrap()
 
-      dispatch(setToken(result.access_token))
+      dispatch(setCredentials({ token: result.access_token, name: result.name }))
       navigate('/dashboard')
-    } catch (err) {
-      setError('Ошибка входа. Пожалуйста, попробуйте еще раз.' + (err as Error).message)
+    } catch {
+      setError('Неверный email или пароль. Пожалуйста, попробуйте еще раз.')
     }
   }
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <input
+    <div className={styles.card}>
+      <form onSubmit={handleSubmit} className={styles.form}>
+        <Input
+          id="email"
           type="email"
-          placeholder="Email"
+          label="Email адрес"
+          placeholder="example@mail.ru"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          disabled={isLoading}
         />
-        <input
+        <Input
+          id="password"
           type="password"
-          placeholder="Password"
+          label="Пароль"
+          placeholder="••••••••"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          disabled={isLoading}
         />
-        <button type="submit">Войти</button>
-        {error && <p>{error}</p>}
+
+        {error && <p className={styles.error}>{error}</p>}
+
+        <button type="submit" className={styles.submitBtn} disabled={isLoading}>
+          {isLoading ? 'Проверка...' : 'Войти'}
+        </button>
       </form>
+
+      <div className={styles.footerLink}>
+        Нет аккаунта? <Link to="/register">Зарегистрироваться</Link>
+      </div>
     </div>
   )
 }

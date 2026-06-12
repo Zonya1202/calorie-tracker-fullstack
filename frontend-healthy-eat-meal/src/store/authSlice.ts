@@ -8,11 +8,12 @@ interface AuthState {
 
 // При старте приложения проверяем, нет ли уже сохраненного токена в браузере
 const tokenFromStorage = localStorage.getItem('token')
+const nameFromStorage = localStorage.getItem('name')
 
 const initialState: AuthState = {
   token: tokenFromStorage,
   isAuthenticated: !!tokenFromStorage, // true, если токен есть
-  name: null,
+  name: nameFromStorage,
 }
 
 export const authSlice = createSlice({
@@ -20,19 +21,22 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
     // Экшен для сохранения токена (вызовется при успешном логине)
-    setToken: (state, action: PayloadAction<string>) => {
-      state.token = action.payload
+    setCredentials: (state, action: PayloadAction<{ token: string; name: string }>) => {
+      state.token = action.payload.token
       state.isAuthenticated = true
-      localStorage.setItem('token', action.payload) // Сохраняем намертво в браузер
+      state.name = action.payload.name
+      localStorage.setItem('token', action.payload.token)
+      localStorage.setItem('name', action.payload.name)
     },
     // Экшен для выхода из аккаунта
     logout: (state) => {
       state.token = null
       state.isAuthenticated = false
+      state.name = null
       localStorage.removeItem('token') // Стираем из браузера
     },
   },
 })
 
-export const { setToken, logout } = authSlice.actions
+export const { setCredentials, logout } = authSlice.actions
 export default authSlice.reducer

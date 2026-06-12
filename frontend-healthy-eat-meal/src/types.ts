@@ -20,6 +20,7 @@ export interface AuthDto {
 export interface TokenResponse {
   access_token: string
   token_type: string
+  name: string
 }
 
 // То, что возвращает бэкенд при успешной регистрации

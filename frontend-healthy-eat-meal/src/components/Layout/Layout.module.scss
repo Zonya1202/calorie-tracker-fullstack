@@ -1,0 +1,13 @@
+@use '@shared/styles/variables' as *;
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; // Растягиваем на всю высоту экрана
+}
+
+.mainContent {
+  flex: 1; // Заставляет контент занимать всё свободное место и прижимать футер
+  padding-top: 24px;
+  padding-bottom: 24px;
+}

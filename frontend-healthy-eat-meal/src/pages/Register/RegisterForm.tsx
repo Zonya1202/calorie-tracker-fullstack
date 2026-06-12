@@ -1,9 +1,11 @@
+import Input from '@components/Input/Input'
 import { useRegisterMutation } from '@shared/api/auth/authApi'
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
+import styles from './RegisterForm.module.scss'
 
 export default function RegisterForm() {
-  const [register] = useRegisterMutation()
+  const [register, { isLoading }] = useRegisterMutation()
   const navigate = useNavigate()
 
   const [email, setEmail] = useState('')
@@ -13,6 +15,8 @@ export default function RegisterForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setError('')
+
     if (!email || !password || !name) {
       setError('Пожалуйста, заполните все поля формы.')
       return
@@ -25,34 +29,52 @@ export default function RegisterForm() {
         name: name,
       }).unwrap()
       navigate('/login')
-    } catch (err) {
-      setError('Ошибка регистрации. Пожалуйста, попробуйте еще раз.' + (err as Error).message)
+    } catch {
+      setError('Ошибка регистрации. Такой Email уже занят.')
     }
   }
+
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <input
+    <div className={styles.card}>
+      <form onSubmit={handleSubmit} className={styles.form}>
+        <Input
+          id="name"
           type="text"
-          placeholder="Name"
+          label="Ваше имя"
+          placeholder="Иван"
           value={name}
           onChange={(e) => setName(e.target.value)}
+          disabled={isLoading}
         />
-        <button type="submit">Зарегестрироваться</button>
-        {error && <p>{error}</p>}
+        <Input
+          id="email"
+          type="email"
+          label="Email адрес"
+          placeholder="example@mail.ru"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          disabled={isLoading}
+        />
+        <Input
+          id="password"
+          type="password"
+          label="Пароль"
+          placeholder="••••••••"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          disabled={isLoading}
+        />
+
+        {error && <p className={styles.error}>{error}</p>}
+
+        <button type="submit" className={styles.submitBtn} disabled={isLoading}>
+          {isLoading ? 'Создание аккаунта...' : 'Зарегистрироваться'}
+        </button>
       </form>
+
+      <div className={styles.footerLink}>
+        Уже есть аккаунт? <Link to="/login">Войти</Link>
+      </div>
     </div>
   )
 }

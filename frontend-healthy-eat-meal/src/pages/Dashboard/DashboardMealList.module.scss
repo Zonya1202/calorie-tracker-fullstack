@@ -3,24 +3,52 @@
 .container {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 32px;
 }
 
 .emptyState {
   text-align: center;
   padding: 48px 24px;
   background: $color-surface;
+  border: 1px dashed $color-border;
   border-radius: $radius-lg;
   color: $color-text-muted;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
-  border: 1px dashed #dee2e6;
+  font-size: 15px;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 8px;
+  border-bottom: 1px solid $color-border;
+}
+
+.sectionTitle {
   font-size: 16px;
+  font-weight: 700;
+  color: $color-text;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.sectionCalories {
+  font-size: 13px;
+  font-weight: 600;
+  color: $color-text-muted;
+  background: lighten($color-surface, 3%);
+  padding: 4px 10px;
+  border-radius: $radius-sm;
+  border: 1px solid $color-border;
 }
 
 .list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -28,24 +56,24 @@
 
 .card {
   background: $color-surface;
+  border: 1px solid $color-border;
   padding: 16px 20px;
   border-radius: $radius-md;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   display: flex;
   justify-content: space-between;
   align-items: center;
   transition: $transition-fast;
-  border-left: 4px solid $color-primary; // Тонкая акцентная линия слева
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    background: $color-surface-hover;
+    border-color: lighten($color-border, 5%);
+    transform: translateY(-1px);
   }
 
   @include mobile {
     flex-direction: column;
     align-items: flex-start;
-    gap: 12px;
+    gap: 16px;
     padding: 16px;
   }
 }
@@ -57,7 +85,7 @@
 }
 
 .foodName {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
   color: $color-text;
   margin: 0;
@@ -66,56 +94,42 @@
 .meta {
   display: flex;
   gap: 12px;
-  font-size: 13px;
+  font-size: 12px;
   color: $color-text-muted;
-
-  @include mobile {
-    flex-direction: column;
-    gap: 4px;
-  }
 }
 
 .weight {
-  background: #f1f3f5;
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-weight: 500;
-}
-
-.caloriesBadge {
-  background: rgba($color-primary, 0.08);
-  color: $color-primary;
-  padding: 8px 16px;
-  border-radius: 20px;
-  font-weight: 700;
-  font-size: 16px;
-  white-space: nowrap;
-
-  @include mobile {
-    align-self: flex-end;
-    width: 100%;
-    text-align: center;
-    box-sizing: border-box;
-  }
+  background: lighten($color-surface, 4%);
+  padding: 1px 6px;
+  border-radius: $radius-sm;
+  color: $color-text;
 }
 
 .cardRight {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 20px;
 
   @include mobile {
     width: 100%;
     justify-content: space-between;
-    margin-top: 12px;
-    border-top: 1px solid #f1f3f5;
+    border-top: 1px solid $color-border;
     padding-top: 12px;
   }
 }
 
+.caloriesBadge {
+  font-size: 15px;
+  font-weight: 700;
+  color: $color-success;
+  background: rgba($color-success, 0.06);
+  padding: 6px 12px;
+  border-radius: 20px;
+}
+
 .actions {
   display: flex;
-  gap: 8px;
+  gap: 6px;
 }
 
 .btnAction {
@@ -123,40 +137,26 @@
   border: none;
   cursor: pointer;
   padding: 6px;
-  border-radius: 6px;
+  border-radius: $radius-sm;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  font-size: 14px;
   transition: $transition-fast;
+  filter: grayscale(1) opacity(0.5);
 
-  &.edit {
-    color: $color-primary;
-    &:hover {
-      background: rgba($color-primary, 0.08);
-    }
-  }
-
-  &.delete {
-    color: $color-danger;
-    &:hover {
-      background: rgba($color-danger, 0.08);
-    }
-  }
-
-  &.save {
-    color: $color-success;
-    &:hover {
-      background: rgba($color-success, 0.08);
-    }
+  &:hover {
+    filter: grayscale(0) opacity(1);
+    background: lighten($color-surface, 5%);
   }
 
   &:disabled {
-    opacity: 0.4;
+    opacity: 0.3;
     cursor: not-allowed;
   }
 }
 
-// Стили для инпутов в режиме инлайн-редактирования
+// --- ИНЛАЙН ФОРМА РЕДАКТИРОВАНИЯ ---
 .inlineForm {
   display: flex;
   gap: 12px;
@@ -166,50 +166,38 @@
   @include mobile {
     flex-direction: column;
     align-items: flex-start;
+    gap: 12px;
   }
 }
 
 .inlineInput {
-  padding: 6px 10px;
-  font-size: 15px;
-  border: 1px solid #ced4da;
-  border-radius: $radius-md;
+  padding: 8px 12px;
+  font-size: 14px;
+  border: 1px solid $color-border;
+  border-radius: $radius-sm;
+  background: $color-bg;
+  color: $color-text;
   font-family: inherit;
+  transition: $transition-fast;
+
+  &:focus {
+    outline: none;
+    border-color: $color-primary;
+  }
 
   &.name {
     flex: 2;
+    @include mobile {
+      width: 100%;
+    }
   }
+
   &.number {
     flex: 1;
-    max-width: 100px;
+    max-width: 110px;
+    @include mobile {
+      max-width: 100%;
+      width: 100%;
+    }
   }
-}
-
-.section {
-  margin-bottom: 28px;
-}
-
-.sectionHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 4px;
-  margin-bottom: 12px;
-  border-bottom: 2px solid #e9ecef;
-}
-
-.sectionTitle {
-  font-size: 18px;
-  font-weight: 700;
-  color: $color-text;
-  margin: 0;
-}
-
-.sectionCalories {
-  font-size: 14px;
-  font-weight: 600;
-  color: $color-text-muted;
-  background: #e9ecef;
-  padding: 4px 10px;
-  border-radius: 12px;
 }

@@ -1,0 +1,65 @@
+// 1. Импортируем наши переменные со звёздочкой, чтобы использовать цвета и скругления
+@use '@shared/styles/variables' as *;
+
+// 2. CSS RESET / СБРОС СТИЛЕЙ
+// Бокс-модель border-box гарантирует, что паддинги не будут раздувать ширину элементов
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+// 3. БАЗОВЫЕ СТИЛИ ДЛЯ СТРАНИЦЫ
+html,
+body {
+  height: 100%;
+  background-color: $color-bg; // Наш серый фон #f8f9fa из переменных
+  color: $color-text; // Наш темный текст #212529
+
+  // Подключаем JetBrains Mono, который прописан в твоем settings.json
+  font-family: 'JetBrains Mono', Consolas, Monaco, monospace;
+  font-size: 16px;
+  line-height: 1.5;
+
+  // Сглаживание шрифтов (мастхэв для Mac/iOS)
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// 4. ОГРАНИЧЕНИЕ ДЛЯ ССЫЛОК И СПИСКОВ (Убираем дефолтную духоту)
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+// 5. ГЛОБАЛЬНЫЙ КЛАСС КОНТЕЙНЕРА (Сетка приложения)
+// Вместо того чтобы писать max-width в инлайнах, используем этот класс везде
+.container {
+  width: 100%;
+  max-width: 800px; // Наша эталонная ширина под Layout
+  margin: 0 auto;
+  padding: 0 16px; // Безопасные отступы по бокам для мобилок
+}
+
+// 6. БАЗОВЫЕ СТИЛИ ДЛЯ КНОПОК И ИНПУТОВ (Чтобы не наследовался дефолтный Times New Roman)
+input,
+button,
+select,
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+}

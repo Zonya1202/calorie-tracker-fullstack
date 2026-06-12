@@ -20,7 +20,7 @@ export default function Header() {
 
   return (
     <header className={styles.header}>
-      <div className={styles.container}>
+      <div className={`${styles.container} container`}>
         <Link to={isAuthenticated ? '/dashboard' : '/'} className={styles.logo}>
           🍏 Калории2026
         </Link>

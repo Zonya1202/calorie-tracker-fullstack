@@ -1,0 +1,68 @@
+@use '@shared/styles/variables' as *;
+
+.card {
+  background: $color-surface;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  padding: 32px;
+  width: 100%;
+  max-width: 420px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.submitBtn {
+  margin-top: 8px;
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 600;
+  color: $color-bg;
+  background: $color-text;
+  border: none;
+  border-radius: $radius-md;
+  cursor: pointer;
+  transition: $transition-fast;
+
+  &:hover:not(:disabled) {
+    background: lighten($color-text-muted, 30%);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.error {
+  color: $color-danger;
+  background: rgba($color-danger, 0.05);
+  border-left: 3px solid $color-danger;
+  padding: 10px 14px;
+  border-radius: $radius-sm;
+  font-size: 13px;
+  font-weight: 500;
+  margin: 0;
+}
+
+.footerLink {
+  margin-top: 16px;
+  text-align: center;
+  font-size: 13px;
+  color: $color-text-muted;
+
+  a {
+    color: $color-primary;
+    font-weight: 500;
+    margin-left: 4px;
+    transition: $transition-fast;
+
+    &:hover {
+      color: lighten($color-primary, 10%);
+      text-decoration: underline;
+    }
+  }
+}
