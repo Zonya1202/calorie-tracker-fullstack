@@ -8,6 +8,7 @@ from database import engine
 import logging
 import os
 from dotenv import load_dotenv
+from prometheus_fastapi_instrumentator import Instrumentator
 
 # Импортируем наши новые роутеры
 from routers import auth, meals
@@ -53,3 +54,5 @@ app.add_middleware(
 # Подключаем роутеры к приложению
 app.include_router(auth.router)
 app.include_router(meals.router)
+
+Instrumentator().instrument(app).expose(app)

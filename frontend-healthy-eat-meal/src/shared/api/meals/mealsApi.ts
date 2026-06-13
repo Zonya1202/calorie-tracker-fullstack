@@ -6,7 +6,7 @@ export const mealsApi = baseApi.injectEndpoints({
     // 1. ЗАПРОС: Берем еду за конкретную дату
     getMeals: builder.query<Meal[], string>({
       query: (date) => `meals?date=${date}`,
-      providesTags: (result, error, date) => [{ type: 'Meals', id: date }],
+      providesTags: (_result, _error, date) => [{ type: 'Meals', id: date }],
     }),
 
     // 2. ДОБАВЛЕНИЕ: Передаем объект еды (с опциональным полем date)
@@ -31,7 +31,7 @@ export const mealsApi = baseApi.injectEndpoints({
         url: `meals/${id}`,
         method: 'DELETE',
       }),
-      invalidatesTags: (result, error, { date }) => [{ type: 'Meals', id: date }],
+      invalidatesTags: (_result, _error, { date }) => [{ type: 'Meals', id: date }],
     }),
 
     // 4. РЕДАКТИРОВАНИЕ: Принимает ID, дату и измененные поля
@@ -48,7 +48,7 @@ export const mealsApi = baseApi.injectEndpoints({
         method: 'PUT',
         body,
       }),
-      invalidatesTags: (result, error, { date }) => [{ type: 'Meals', id: date }],
+      invalidatesTags: (_result, _error, { date }) => [{ type: 'Meals', id: date }],
     }),
   }),
 })

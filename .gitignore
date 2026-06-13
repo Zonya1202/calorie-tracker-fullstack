@@ -3,6 +3,8 @@ frontend-healthy-eat-meal/node_modules/
 frontend-healthy-eat-meal/dist/
 frontend-healthy-eat-meal/.lock-wscript
 frontend-healthy-eat-meal/.vite/
+frontend-healthy-eat-meal/.env
+frontend-healthy-eat-meal/.env.local
 
 # Бэкенд (Python)
 backend-healthy-eat-meal/**/__pycache__/
@@ -12,10 +14,13 @@ backend-healthy-eat-meal/**/*.pyc
 backend-healthy-eat-meal/.venv/
 backend-healthy-eat-meal/.env
 backend-healthy-eat-meal/.env.local
+backend-healthy-eat-meal/data/
 
-# Фронтенд (Environment)
-frontend-healthy-eat-meal/.env
-frontend-healthy-eat-meal/.env.local
+#мониторинг
+monitoring/positions.yaml
+*.log
+backend_logs.txt
+
 
 # Системные файлы
 .DS_Store

@@ -1,0 +1,78 @@
+services:
+  backend:
+    build:
+      context: ./backend-healthy-eat-meal
+      dockerfile: Dockerfile
+    container_name: calorie-tracker-backend
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./backend-healthy-eat-meal/.env
+    volumes:
+      - backend_data:/app/data
+    networks:
+      - tracker-network
+    # Ждем, пока запустится Loki, чтобы сразу слать туда логи
+    depends_on:
+      - loki
+    # Включаем отправку логов бэкенда напрямую в Loki
+    logging:
+      driver: loki
+      options:
+        loki-url: "http://localhost:3100/loki/api/v1/push"
+        loki-external-labels: "container_name=calorie-tracker-backend"
+
+  frontend:
+    build:
+      context: ./frontend-healthy-eat-meal
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: /api
+    container_name: calorie-tracker-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - tracker-network
+
+  prometheus:
+    image: prom/prometheus:v2.51.0
+    container_name: tracker-prometheus
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    networks:
+      - tracker-network
+
+  loki:
+    image: grafana/loki:3.0.0
+    container_name: tracker-loki
+    command: -config.file=/etc/loki/local-config.yaml
+    ports:
+      - "3100:3100"
+    networks:
+      - tracker-network
+
+  grafana:
+    image: grafana/grafana:10.4.1
+    container_name: tracker-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - ./monitoring/grafana-datasources.yml:/etc/grafana/provisioning/datasources/datasources.yaml
+    depends_on:
+      - prometheus
+      - loki
+    networks:
+      - tracker-network
+
+networks:
+  tracker-network:
+    driver: bridge
+
+volumes:
+  backend_data:

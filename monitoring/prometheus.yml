@@ -1,0 +1,13 @@
+global:
+  scrape_interval: 5s # Как часто опрашивать сервисы (каждые 5 секунд)
+
+scrape_configs:
+  # Проверяем, что сам Prometheus жив
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # Наш бэкенд на FastAPI
+  - job_name: 'fastapi-backend'
+    static_configs:
+      - targets: ['backend:8000'] # Имя контейнера и его внутренний порт
