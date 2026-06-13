@@ -28,8 +28,10 @@ export default function DashboardMealListItemEdit({
     }
 
     try {
+      const mealDate = meal.created_at.split('T')[0]
       await updateMeal({
         id: meal.id,
+        date: mealDate,
         body: {
           food_name: editName.trim(),
           calories_per_100g: Number(editCalories),

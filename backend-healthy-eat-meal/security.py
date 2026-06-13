@@ -1,13 +1,22 @@
 from passlib.context import CryptContext
 from datetime import datetime, timedelta
 import jwt
+import os
+from dotenv import load_dotenv
+
+# Загружаем переменные окружения из .env файла
+load_dotenv()
 
 # Указываем алгоритм хэширования паролей
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-# СЕКРЕТНЫЙ КЛЮЧ. В реальном проекте он прячется, но для простоты напишем строку.
-# С его помощью сервер подписывает пропуска. Если изменить хоть одну букву, токен станет невалидным.
-SECRET_KEY = "SUPER_SECRET_KEY_FOR_CALORIE_TRACKER_2026"
+# Загружаем СЕКРЕТНЫЙ КЛЮЧ из переменной окружения
+SECRET_KEY = os.getenv("SECRET_KEY")
+if not SECRET_KEY:
+    raise ValueError(
+        "SECRET_KEY not found in environment variables. "
+        "Please create a .env file with SECRET_KEY or set it as an environment variable."
+    )
 ALGORITHM = "HS256"
 
 

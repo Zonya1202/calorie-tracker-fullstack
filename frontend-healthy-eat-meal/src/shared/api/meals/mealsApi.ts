@@ -1,62 +1,58 @@
 import { baseApi } from '@api/baseApi'
-import type { Meal } from '@types'
+import type { Meal } from '@types' // Импортируем твой базовый тип Meal
 
-// Описываем типы для параметров (query params), если они нужны
-interface GetMealsParams {
-  total_calories?: number
-  date?: string
-}
-
-interface CreateMealDto {
-  food_name: string
-  calories_per_100g: number
-  weight_g: number
-  meal_type: string
-}
-
-// Расширяем базовый API эндпоинтами для еды
 export const mealsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    // Аналог твоего getDriverItems
-    getMeals: builder.query<Meal[], GetMealsParams | void>({
-      query: (params) => ({
-        url: 'meals',
-        method: 'GET',
-        params: params || {}, // Передаем параметры даты, если есть
-      }),
-      providesTags: ['Meals'],
+    // 1. ЗАПРОС: Берем еду за конкретную дату
+    getMeals: builder.query<Meal[], string>({
+      query: (date) => `meals?date=${date}`,
+      providesTags: (result, error, date) => [{ type: 'Meals', id: date }],
     }),
 
-    // Запрос на добавление еды (POST)
-    addMeal: builder.mutation<Meal, CreateMealDto>({
+    // 2. ДОБАВЛЕНИЕ: Передаем объект еды (с опциональным полем date)
+    addMeal: builder.mutation<
+      Meal,
+      Omit<Meal, 'id' | 'created_at' | 'user_id' | 'total_calories'> & { date?: string }
+    >({
       query: (body) => ({
         url: 'meals',
         method: 'POST',
         body,
       }),
-      invalidatesTags: ['Meals'], // Автоматически заставит getMeals перезапуститься!
+      // Если бэкенд вернул успешный результат, берем дату из ответа, чтобы сбросить кэш
+      invalidatesTags: (result) => [
+        { type: 'Meals', id: result ? result.created_at.split('T')[0] : 'today' },
+      ],
     }),
-    // Метод удаления (DELETE)
-    deleteMeal: builder.mutation<void, number>({
-      query: (id) => ({
+
+    // 3. УДАЛЕНИЕ: Принимает ID и строку даты
+    deleteMeal: builder.mutation<void, { id: number; date: string }>({
+      query: ({ id }) => ({
         url: `meals/${id}`,
         method: 'DELETE',
       }),
-      invalidatesTags: ['Meals'], // Сбросит кэш и перерисует список на экране
+      invalidatesTags: (result, error, { date }) => [{ type: 'Meals', id: date }],
     }),
-    // Метод изменения (PUT)
-    updateMeal: builder.mutation<Meal, { id: number; body: CreateMealDto }>({
+
+    // 4. РЕДАКТИРОВАНИЕ: Принимает ID, дату и измененные поля
+    updateMeal: builder.mutation<
+      Meal,
+      {
+        id: number
+        date: string
+        body: Omit<Meal, 'id' | 'created_at' | 'user_id' | 'total_calories'>
+      }
+    >({
       query: ({ id, body }) => ({
         url: `meals/${id}`,
         method: 'PUT',
         body,
       }),
-      invalidatesTags: ['Meals'],
+      invalidatesTags: (result, error, { date }) => [{ type: 'Meals', id: date }],
     }),
   }),
 })
 
-// Экспортируем авто-сгенерированные хуки для компонентов
 export const {
   useGetMealsQuery,
   useAddMealMutation,

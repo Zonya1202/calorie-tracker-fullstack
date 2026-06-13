@@ -1,13 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { baseApi } from '@shared/api/baseApi'
 import authReducer from './authSlice'
+import dateReducer from './dateSlice'
 
 export const store = configureStore({
   reducer: {
-    // Подключаем кэш нашего API в общее дерево Redux
     [baseApi.reducerPath]: baseApi.reducer,
-    // И наш слайс авторизации, который будет хранить токен и статус аутентификации
     auth: authReducer,
+    date: dateReducer,
   },
 
   // Мидлвар нужен RTK Query для кэширования, инвалидации тегов и полилинга

@@ -4,6 +4,7 @@ import AddMeal from '@pages/AddMeal/AddMeal'
 import Layout from '@components/Layout/Layout'
 import Register from '@pages/Register/Register'
 import LogIn from '@pages/LogIn/LogIn'
+import ProtectedRoute from '@components/ProtectedRoute/ProtectedRoute'
 import { useSelector } from 'react-redux'
 import type { RootState } from './store'
 
@@ -16,10 +17,9 @@ function App() {
           <Route
             path="/"
             element={
-              // затычка
               <div style={{ textAlign: 'center', padding: '40px 20px' }}>
-                <h1>Добро пожаловать в Калории2026!</h1>
-                <p>Это крутой fullstack трекер еды.</p>
+                <h1>Welcome to Calorie Tracker 2026!</h1>
+                <p>A powerful fullstack app to track your daily calories.</p>
                 <Link
                   to={isAuthenticated ? '/dashboard' : '/login'}
                   style={{
@@ -32,25 +32,33 @@ function App() {
                     borderRadius: '5px',
                   }}
                 >
-                  Перейти в личный кабинет (Dashboard)
+                  Go to Dashboard
                 </Link>
               </div>
             }
           />
-          {/* Главная страница — список калорий */}
-          <Route path="/dashboard" element={<Dashboard />} />
-
-          {/* Страница формы добавления */}
-          <Route path="/add" element={<AddMeal />} />
-
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/add"
+            element={
+              <ProtectedRoute>
+                <AddMeal />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<LogIn />} />
-
-          {/* Роут-заглушка на случай, если пользователь введет несуществующий URL */}
           <Route
             path="*"
             element={
-              <div style={{ padding: '20px', textAlign: 'center' }}>Страница не найдена (404)</div>
+              <div style={{ padding: '20px', textAlign: 'center' }}>Page not found (404)</div>
             }
           />
         </Routes>

@@ -13,7 +13,8 @@ export default function DashboardMealListItem({ meal, onStartEdit }: DashboardMe
   const handleDelete = async () => {
     if (window.confirm(`Вы уверены, что хотите удалить "${meal.food_name}"?`)) {
       try {
-        await deleteMeal(meal.id).unwrap()
+        const mealDate = meal.created_at.split('T')[0]
+        await deleteMeal({ id: meal.id, date: mealDate }).unwrap()
       } catch (err) {
         console.error(err)
       }

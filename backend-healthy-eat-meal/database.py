@@ -1,9 +1,14 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+import os
+from dotenv import load_dotenv
 
-# Указываем, где будет лежать файл нашей базы данных SQLite
-DATABASE_URL = "sqlite:///./calories.db"
+# Загружаем переменные окружения
+load_dotenv()
+
+# Получаем URL базы данных из переменной окружения
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./calories.db")
 
 # Создаем движок подключения.
 # check_same_thread нужен ТОЛЬКО для SQLite, чтобы FastAPI мог безопасно работать в несколько потоков

@@ -8,8 +8,17 @@ frontend-healthy-eat-meal/.vite/
 backend-healthy-eat-meal/**/__pycache__/
 backend-healthy-eat-meal/.pytest_cache/
 backend-healthy-eat-meal/*.db
-backend-healthy-eat-meal/**/*.pyc 
+backend-healthy-eat-meal/**/*.pyc
+backend-healthy-eat-meal/.venv/
+backend-healthy-eat-meal/.env
+backend-healthy-eat-meal/.env.local
+
+# Фронтенд (Environment)
+frontend-healthy-eat-meal/.env
+frontend-healthy-eat-meal/.env.local
 
 # Системные файлы
 .DS_Store
 Thumbs.db
+postman
+.postman

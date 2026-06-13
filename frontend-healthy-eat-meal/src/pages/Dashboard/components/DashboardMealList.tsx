@@ -7,8 +7,12 @@ import type { Meal } from '@types'
 
 type GroupedMeals = Record<string, { title: string; items: Meal[] }>
 
-export default function DashboardMealList() {
-  const { data: meals = [], isLoading, error } = useGetMealsQuery()
+interface DashboardMealListProps {
+  selectedDate: string
+}
+
+export default function DashboardMealList({ selectedDate }: DashboardMealListProps) {
+  const { data: meals = [], isLoading, error } = useGetMealsQuery(selectedDate)
 
   const [editingId, setEditingId] = useState<number | null>(null)
 

@@ -1,32 +1,55 @@
 # Глобальная Точка Входа (main.py)
-# Теперь этот файл выполняет роль Генерального Директора. Он сам ничего не делает, он просто собирает систему воедино:
-# 1. Инициализирует сам фреймворк FastAPI.
-# 2. Дает команду SQLAlchemy проверить и создать таблицы в базе данных SQLite (models.Base.metadata.create_all).
-# 3. Настраивает правила безопасности CORS для фронтенда.
-# 4. Регистрирует («подключает») роутеры: app.include_router(auth.router).
-
+# Инициализирует FastAPI, настраивает безопасность, логирование и подключает роутеры
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import models
 from database import engine
+import logging
+import os
+from dotenv import load_dotenv
 
 # Импортируем наши новые роутеры
 from routers import auth, meals
 
+# Загружаем переменные окружения
+load_dotenv()
+
+# Настройка логирования
+logging.basicConfig(level=os.getenv("LOG_LEVEL", "INFO"))
+logger = logging.getLogger(__name__)
+
 app = FastAPI(title="Calorie Tracker API", version="1.0.0")
 
-# Автоматически разворачиваем таблицы в базе SQLite
-models.Base.metadata.create_all(bind=engine)
+
+def init_db():
+    """Initialize database tables."""
+    models.Base.metadata.create_all(bind=engine)
+    logger.info("Database tables initialized")
+
+
+# Initialize database on startup
+@app.on_event("startup")
+def startup_event():
+    init_db()
+    # Настройка CORS из переменных окружения
+    cors_origins = os.getenv("CORS_ORIGINS", "http://localhost:5173").split(",")
+    cors_origins = [origin.strip() for origin in cors_origins]
+    logger.info(f"CORS configured for origins: {cors_origins}")
+
+
+# Настройка CORS из переменных окружения
+cors_origins = os.getenv("CORS_ORIGINS", "http://localhost:5173").split(",")
+cors_origins = [origin.strip() for origin in cors_origins]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=cors_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# МАГИЯ: Подключаем роутеры к приложению
+# Подключаем роутеры к приложению
 app.include_router(auth.router)
 app.include_router(meals.router)
