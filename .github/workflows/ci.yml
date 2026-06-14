@@ -7,6 +7,10 @@ on:
   pull_request:
     branches: ['main'] # При создании ПР (мерж-реквеста) в main
 
+# Глобальные переменные для всего пайплайна
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true # Фикс системных варнингов GitHub
+
 jobs:
   # --- РАБОТА 1: ПРОВЕРКА БЭКЕНДА ---
   backend-tests:
@@ -44,6 +48,7 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm' # Кэшируем node_modules, чтобы сборка в следующий раз шла быстрее
+          cache-dependency-path: frontend-healthy-eat-meal/package-lock.json
 
       - name: Install dependencies
         run: |
