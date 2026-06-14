@@ -1,0 +1,70 @@
+name: Calorie Tracker CI Laboratory
+
+# Триггеры: когда запускать робота?
+on:
+  push:
+    branches: ['main', 'develop'] # При любом пуше в ветки main или develop
+  pull_request:
+    branches: ['main'] # При создании ПР (мерж-реквеста) в main
+
+jobs:
+  # --- РАБОТА 1: ПРОВЕРКА БЭКЕНДА ---
+  backend-tests:
+    runs-on: ubuntu-latest # Выделяем чистую виртуалку на Linux Ubuntu
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4 # Робот скачивает твой код из гитхаба в виртуалку
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5 # Устанавливаем Python 3.11 внутри виртуалки
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          cd backend-healthy-eat-meal
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest httpx # Ставим инструменты для запуска тестов
+
+      - name: Run Pytest
+        run: |
+          cd backend-healthy-eat-meal
+          pytest # Запускаем твои интеграционные тесты
+
+  # --- РАБОТА 2: ПРОВЕРКА ФРОНТЕНДА ---
+  frontend-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4 # Устанавливаем Node.js 20 версии
+        with:
+          node-version: '20'
+          cache: 'npm' # Кэшируем node_modules, чтобы сборка в следующий раз шла быстрее
+
+      - name: Install dependencies
+        run: |
+          cd frontend-healthy-eat-meal
+          npm ci # Чистая установка пакетов строго по package-lock.json
+
+      - name: Check TypeScript & Build Vite
+        run: |
+          cd frontend-healthy-eat-meal
+          npm run build # Запуск tsc и сборки статики Nginx
+
+  # --- РАБОТА 3: СБОРКА DOCKER (SMOKE TEST) ---
+  docker-build-test:
+    # Эта работа начнется ТОЛЬКО если бэк и фронт успешно прошли свои проверки
+    needs: [backend-tests, frontend-build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Verify Docker Compose Build
+        run: |
+          # Проверяем, что docker-compose собирает образы без ошибок синтаксиса
+          docker compose build
